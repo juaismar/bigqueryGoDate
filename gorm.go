@@ -27,7 +27,7 @@ func (d *Date) Scan(value interface{}) error {
 	case civil.Date:
 		*d = Date{
 			Year:  v.Year,
-			Month: v.Month,
+			Month: int(v.Month),
 			Day:   v.Day,
 		}
 	default:

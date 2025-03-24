@@ -10,15 +10,17 @@ import (
 // This type does not include location information, and therefore does not
 // describe a unique 24-hour timespan.
 type Date struct {
-	Year  int        // Year (e.g., 2014).
-	Month time.Month // Month of the year (January = 1, ...).
-	Day   int        // Day of the month, starting at 1.
+	Year  int // Year (e.g., 2014).
+	Month int // Month of the year (January = 1, ...).
+	Day   int // Day of the month, starting at 1.
 }
 
 // DateOf returns the Date in which a time occurs in that time's location.
 func DateOf(t time.Time) Date {
 	var d Date
-	d.Year, d.Month, d.Day = t.Date()
+	var month time.Month
+	d.Year, month, d.Day = t.Date()
+	d.Month = int(month)
 	return d
 }
 
@@ -56,7 +58,7 @@ func (d Date) IsValid() bool {
 //
 // In panics if loc is nil.
 func (d Date) In(loc *time.Location) time.Time {
-	return time.Date(d.Year, d.Month, d.Day, 0, 0, 0, 0, loc)
+	return time.Date(d.Year, time.Month(d.Month), d.Day, 0, 0, 0, 0, loc)
 }
 
 // AddDays returns the date that is n days in the future.
