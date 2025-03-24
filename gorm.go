@@ -4,6 +4,8 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"time"
+
+	"cloud.google.com/go/civil"
 )
 
 // Scan implementa el interface sql.Scanner para Date
@@ -22,6 +24,12 @@ func (d *Date) Scan(value interface{}) error {
 		*d = parsed
 	case time.Time:
 		*d = DateOf(v)
+	case civil.Date:
+		*d = Date{
+			Year:  v.Year,
+			Month: v.Month,
+			Day:   v.Day,
+		}
 	default:
 		return fmt.Errorf("no se puede convertir %T a Date", value)
 	}
